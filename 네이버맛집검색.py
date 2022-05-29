@@ -102,7 +102,7 @@ def driver_open(place):
     driver.implicitly_wait(20)
     driver.get(URL)
 
-    all_scrolling(driver)
+    # all_scrolling(driver)
 
     html = driver.page_source
     place = check(place)
@@ -172,7 +172,7 @@ def one_scrolling(driver, ht, plus):
             name = soup.find('span', {'class': '_3XamX'}).text
             info = soup.find('span', {'class':  '_3ocDE'}).text
             # 점수, 방문자, 블로그 리뷰
-            avg = soup.find('div', {'class': '_37n49'})
+            avg = soup.find('div', {'class': '_20Ivz'})
             score_visit_blog = avg.find_all('span',  {'class': '_1Y6hi'})
 
             if len(score_visit_blog) == 1:
