@@ -102,7 +102,7 @@ def driver_open(place):
     driver.implicitly_wait(20)
     driver.get(URL)
 
-    # all_scrolling(driver)
+    all_scrolling(driver)
 
     html = driver.page_source
     place = check(place)

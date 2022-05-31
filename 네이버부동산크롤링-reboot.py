@@ -1,3 +1,4 @@
+from tkinter.font import names
 from traceback import print_exception
 from bs4 import BeautifulSoup as bs
 from selenium import webdriver
@@ -40,6 +41,8 @@ def click_nolink_for_scrollDown(driver):
 
 
 def save_to_csv(place, name):
+    columns_name = ['매물명', '동', '거래유형', '가격', '유형', '전체면적', '실제면적',
+                    '높이', '방향', '설명', '특징', '확인', '확인날짜', '링크', '크롤링날짜']
     CSV_file = pd.DataFrame(place)
     out_path = 'D:/파이썬 공부/web/crawling/부동산/%s(%s).csv' % (name, nowDatetime)
     # uniq = 1
@@ -47,7 +50,8 @@ def save_to_csv(place, name):
     #     out_path = 'D:/파이썬 공부/web/crawling/부동산/%s(%s).csv' % (
     #         place, uniq)
     #     uniq += 1
-    CSV_file.to_csv(out_path, header=False,
+
+    CSV_file.to_csv(out_path, header=None,
                     index=False, encoding='utf-8-sig', mode='a')
 
 # 들어가서 전체 아파트 전체 크로링
