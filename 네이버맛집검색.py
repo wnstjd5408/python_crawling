@@ -12,6 +12,8 @@ from PyQt5.QtCore import *
 import logging
 
 # 페이지 들어간 후에 클릭하는거
+now = datetime.datetime.now()
+nowDatetime = now.strftime('%Y-%m-%d(%H,%M,%S)')
 
 
 def click_nolink_for_scrollDown(driver):
@@ -68,14 +70,14 @@ def save_to_place(name, place):
 
 def check(file_name):
     file_ext = '.csv'
-    output_path = 'D:/파이썬 공부/web/crawling/place/%s%s' % (
-        file_name, file_ext)
-    uniq = 1
-    while os.path.exists(output_path):
+    output_path = 'D:/파이썬 공부/web/crawling/place/%s%s(%s)' % (
+        file_name, nowDatetime, file_ext)
+    # uniq = 1
+    # while os.path.exists(output_path):
 
-        output_path = 'D:/파이썬 공부/web/crawling/place/%s(%d)%s' % (
-            file_name, uniq, file_ext)
-        uniq += 1
+    #     output_path = 'D:/파이썬 공부/web/crawling/place/%s(%d)%s' % (
+    #         file_name, uniq, file_ext)
+    #     uniq += 1
     return output_path
 
 
