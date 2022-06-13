@@ -70,7 +70,7 @@ def save_to_place(name, place):
 
 def check(file_name):
     file_ext = '.csv'
-    output_path = 'D:/파이썬 공부/web/crawling/place/%s%s(%s)' % (
+    output_path = 'D:/파이썬 공부/web/crawling/place/%s(%s)%s' % (
         file_name, nowDatetime, file_ext)
     # uniq = 1
     # while os.path.exists(output_path):
