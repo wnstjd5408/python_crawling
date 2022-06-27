@@ -1,21 +1,12 @@
-from tkinter.font import names
-from traceback import print_exception
 from bs4 import BeautifulSoup as bs
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import os
-import re
 import time
-import requests
 import sys
-import csv
-from datetime import date, datetime
-import numpy as np
+from datetime import datetime
 import pandas as pd
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-
-from 네이버맛집검색 import one_scrolling
 '''
 ========================부동산 크롤링 ==========================
  1. 네이버 부동산 모바일 버전을 불러옵니다.
@@ -45,12 +36,6 @@ def save_to_csv(place, name):
                     '높이', '방향', '설명', '특징', '확인', '확인날짜', '링크', '크롤링날짜']
     CSV_file = pd.DataFrame(place)
     out_path = 'D:/파이썬 공부/web/crawling/부동산/%s(%s).csv' % (name, nowDatetime)
-    # uniq = 1
-    # while os.path.exists(out_path):
-    #     out_path = 'D:/파이썬 공부/web/crawling/부동산/%s(%s).csv' % (
-    #         place, uniq)
-    #     uniq += 1
-
     CSV_file.to_csv(out_path, header=None,
                     index=False, encoding='utf-8-sig', mode='a')
 
@@ -160,6 +145,8 @@ def one_scrolling(driver, place):
         driver.close()
         driver.switch_to_window(driver.window_handles[0])
 
+# 목차 크롤링
+
 
 def first_page_scrolling(driver):
     while True:
@@ -174,6 +161,8 @@ def first_page_scrolling(driver):
         except:
             driver.quit()
             time.sleep(1)
+
+# Chorme driver로 Chorme 창 켜기
 
 
 def driver_open(place):
@@ -197,28 +186,7 @@ def driver_open(place):
     one_scrolling(driver, place)
 
     driver.quit()
-# gubun = 4
-
-# url = "https://m.land.naver.com/search/result/" + keyword
-# headers = {
-#     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; ; NCLIENT50_AAP0DCF421A65F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36"}
-
-# res = requests.get(url, headers=headers)
-# time.sleep(3)
-# res.raise_for_status()
-# soup = bs(res.text, "lxml")
-# # print("res.text = ", type(res.text), res.text)
-# # print("soup", type(soup))
-# # print(url)
-
-# filter1 = res.text.split("filter: {", 1)
-# filter2 = filter1[1].split('},', 1)
-# filter3 = filter2[0].lstrip().rstrip()
-
-
-# regex = re.compile("{}(.*){}".format(re.escape("'"), re.escape("'")))
-# filter_lists = regex.findall(filter3)
-# print(filter_lists)
+# PYQT
 
 
 class MyApp(QWidget):
@@ -243,9 +211,6 @@ class MyApp(QWidget):
         self.setGeometry(800, 350, 400, 300)
 
         self.show()
-
-    # def (self):
-    #     driver_open(qle.text())
 
     def check_pressed(self):
         driver_open(self.qle.text())
