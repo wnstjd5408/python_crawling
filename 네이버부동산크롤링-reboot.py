@@ -52,11 +52,11 @@ def one_scrolling(driver, place):
     p = 0
     n = 1
     pl = []
-    etc = ""
     soup = bs(html, 'html.parser')
 
     while True:
         num += 1
+        etc = ""
 
 # //*[@id="_listContainer"]/div/div[3]/div[3]/div[1]/div[1]/a
 # //*[@id="_listContainer"]/div/div[3]/div[1]/div[1]/div[1]/a
@@ -140,7 +140,7 @@ def one_scrolling(driver, place):
             pl.append([b_title]+[dong]+[info] + [price] + [kinds] + [supply_area] + [private_area] + [height] + [wind] + [etc] + [tag] + [merit_title]
                       + [merit_date] + [link] + [nowDate])
             count += 1
-            etc = ""
+
         save_to_csv(pl, place)
         pl.clear()
         driver.close()
