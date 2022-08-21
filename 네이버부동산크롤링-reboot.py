@@ -140,6 +140,7 @@ def one_scrolling(driver, place):
             pl.append([b_title]+[dong]+[info] + [price] + [kinds] + [supply_area] + [private_area] + [height] + [wind] + [etc] + [tag] + [merit_title]
                       + [merit_date] + [link] + [nowDate])
             count += 1
+            etc = ""
         save_to_csv(pl, place)
         pl.clear()
         driver.close()
