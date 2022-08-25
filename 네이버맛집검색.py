@@ -16,6 +16,7 @@ now = datetime.datetime.now()
 nowDatetime = now.strftime('%Y-%m-%d(%H,%M,%S)')
 
 
+# 시간 클릭 하는 메서드
 def click_nolink_for_scrollDown(driver):
     while True:
         try:
@@ -30,9 +31,9 @@ def click_nolink_for_scrollDown(driver):
             time.sleep(1)
             # 시간 클릭
             element = driver.find_element_by_css_selector(
-                '#app-root > div > div > div > div:nth-child(6) > div > div.place_section.no_margin._18vYz > div > ul > li._1M_Iz._2KHqk > div > a')
+                '#app-root > div > div > div > div:nth-child(6) > div > div.place_section.no_margin.vKA6F > div > ul > li.SF_Mq.Sg7qM > div > a')
             # app-root > div > div > div > div:nth-child(5) > div > div.place_section.no_margin._18vYz > div > ul > li._1M_Iz._2KHqk > div > a
-            # app-root > div > div > div > div:nth-child(6) > div > div.place_section.no_margin._18vYz > div > ul > li._1M_Iz._2KHqk > div > a
+
             print('클릭: ', element)
 
             element.click()
@@ -104,7 +105,7 @@ def driver_open(place):
     driver.implicitly_wait(20)
     driver.get(URL)
 
-    all_scrolling(driver)
+    # all_scrolling(driver)
 
     html = driver.page_source
     place = check(place)
@@ -160,8 +161,9 @@ def one_scrolling(driver, ht, plus):
         html = driver.page_source
         soup = bs(html, 'html.parser')
         try:
-            im = soup.find('div', {'class': 'cb7hz'})['style']
+            im = soup.find('div', {'class': 'K0PDV'})['style']
         except:
+            print('이미지 없음')
             driver.close()
             driver.switch_to_window(driver.window_handles[0])
             continue
@@ -170,12 +172,15 @@ def one_scrolling(driver, ht, plus):
             imagefirst = im[found+2::]
             backfound = imagefirst.find(')')
             imageurl = imagefirst[0: backfound-1]
+            print('이미지 URL :', imageurl)
             # 이미지 검색
-            name = soup.find('span', {'class': '_3XamX'}).text
-            info = soup.find('span', {'class':  '_3ocDE'}).text
+            name = soup.find('span', {'class': 'Fc1rA'}).text
+            print("이름 : ", name)
+            info = soup.find('span', {'class':  'DJJvD'}).text
+            print("가게 종류 : ", info)
             # 점수, 방문자, 블로그 리뷰
-            avg = soup.find('div', {'class': '_20Ivz'})
-            score_visit_blog = avg.find_all('span',  {'class': '_1Y6hi'})
+            avg = soup.find('div', {'class': 'dAsGb'})
+            score_visit_blog = avg.find_all('span',  {'class': 'PXMot'})
 
             if len(score_visit_blog) == 1:
                 if '방문자리뷰' in score_visit_blog[0].find('a').text:
@@ -199,20 +204,21 @@ def one_scrolling(driver, ht, plus):
                 score = score_visit_blog[0].find('em').text
                 visit = score_visit_blog[1].find('em').text
                 blog = score_visit_blog[2].find('em').text
-
-            data = soup.find_all('div', {'class': '_1h3B_'})
-            location = data[0].find('span', {'class': '_2yqUQ'}).text
+            print(f'점수 : {score} , 방문자리뷰 : {visit}, 블로그 리뷰 : {blog}')
+            data = soup.find_all('div', {'class': 'x8JmK'})
+            location = data[0].find('span', {'class': 'IH7VW'}).text
             try:
-                subway_location = data[0].find('div', {'class': '_2P6sT'})
+                subway_location = data[0].find('div', {'class': 'jyfLw'})
                 # subway_number = subway_location.find(
                 #     'span', {'class': '_12Coj'}).text
                 subway_location = subway_location.text
             except:
                 subway_location = None
             # 영엽시간 검색
+            print(f'위치 : {location}, 지하철역 : {subway_location}')
             try:
-                timelen = soup.find_all('div', {'class': '_1h3B_'})[1].find_all(
-                    'div', {'class': '_2ZP3j'})
+                timelen = soup.find_all('div', {'class': 'x8JmK'})[1].find_all(
+                    'div', {'class': 'nNPOq'})
                 print('갯수  :',  len(timelen))
                 if len(timelen) == 1:
                     print(timelen[0].text)
@@ -221,9 +227,9 @@ def one_scrolling(driver, ht, plus):
                     for i in timelen[1::]:
                         try:
 
-                            etc = i.find('span', {'class': '_20pEw'}).text
+                            etc = i.find('span', {'class': 'ob_be'}).text
                         except:
-                            etc = i.find('span', {'class': '_20pEw'}).text
+                            etc = i.find('span', {'class': 'ob_be'}).text
 
                         opentime.append(etc)
 
@@ -231,8 +237,10 @@ def one_scrolling(driver, ht, plus):
             except:
                 tt = None
                 # place를 리스트에 딕셔너리 형태로 저장을 시킨다
+
+            print('시간 : ', tt)
             try:
-                sns_site = soup.find('div', {'class': '_14J59'}).text
+                sns_site = soup.find('div', {'class': 'CQDdi'}).text
             except:
                 sns_site = None
             print('sns_site : ', sns_site)
