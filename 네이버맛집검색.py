@@ -1,15 +1,14 @@
+import csv
+import datetime
+import sys
+import time
+
 from bs4 import BeautifulSoup as bs
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import time
-import csv
-import os
-import sys
-import re
-import datetime
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-import logging
+from selenium.common.exceptions import NoSuchElementException
 
 # 페이지 들어간 후에 클릭하는거
 now = datetime.datetime.now()
@@ -37,19 +36,25 @@ def click_nolink_for_scrollDown(driver):
             print('클릭: ', element)
 
             element.click()
+
             # driver.execute_script(
             #     "arguments[0].setAttribute('aria-expanded', True)", pl)
-            time.sleep(0.5)
-            for i in range(10):
-                time.sleep(0.2)
-                driver.find_element_by_css_selector(
-                    "body").send_keys(Keys.PAGE_DOWN)
-            time.sleep(0.4)
 
-        except:
+            """ 
+            클릭 후에 스크롤링 주석처리 
+            """
+            # time.sleep(0.5)
+            # for i in range(10):
+            #     time.sleep(0.2)
+            #     driver.find_element_by_css_selector(
+            #         "body").send_keys(Keys.PAGE_DOWN)
+            time.sleep(0.1)
+
+        except NoSuchElementException as e:
             plus = None
             pl = None
-            print('클릭이 안됨')
+            print('클릭이 안됨 :', e)
+            pass
         finally:
             break
 
@@ -105,7 +110,7 @@ def driver_open(place):
     driver.implicitly_wait(20)
     driver.get(URL)
 
-    # all_scrolling(driver)
+    all_scrolling(driver)
 
     html = driver.page_source
     place = check(place)
@@ -172,12 +177,12 @@ def one_scrolling(driver, ht, plus):
             imagefirst = im[found+2::]
             backfound = imagefirst.find(')')
             imageurl = imagefirst[0: backfound-1]
-            print('이미지 URL :', imageurl)
+            # print('이미지 URL :', imageurl)
             # 이미지 검색
             name = soup.find('span', {'class': 'Fc1rA'}).text
-            print("이름 : ", name)
+            # print("이름 : ", name)
             info = soup.find('span', {'class':  'DJJvD'}).text
-            print("가게 종류 : ", info)
+            # print("가게 종류 : ", info)
             # 점수, 방문자, 블로그 리뷰
             avg = soup.find('div', {'class': 'dAsGb'})
             score_visit_blog = avg.find_all('span',  {'class': 'PXMot'})
@@ -204,7 +209,7 @@ def one_scrolling(driver, ht, plus):
                 score = score_visit_blog[0].find('em').text
                 visit = score_visit_blog[1].find('em').text
                 blog = score_visit_blog[2].find('em').text
-            print(f'점수 : {score} , 방문자리뷰 : {visit}, 블로그 리뷰 : {blog}')
+            # print(f'점수 : {score} , 방문자리뷰 : {visit}, 블로그 리뷰 : {blog}')
             data = soup.find_all('div', {'class': 'x8JmK'})
             location = data[0].find('span', {'class': 'IH7VW'}).text
             try:
@@ -215,7 +220,7 @@ def one_scrolling(driver, ht, plus):
             except:
                 subway_location = None
             # 영엽시간 검색
-            print(f'위치 : {location}, 지하철역 : {subway_location}')
+            # print(f'위치 : {location}, 지하철역 : {subway_location}')
             try:
                 timelen = soup.find_all('div', {'class': 'x8JmK'})[1].find_all(
                     'div', {'class': 'nNPOq'})
@@ -234,11 +239,12 @@ def one_scrolling(driver, ht, plus):
                         opentime.append(etc)
 
                     tt = ",".join(opentime)
+
             except:
                 tt = None
                 # place를 리스트에 딕셔너리 형태로 저장을 시킨다
 
-            print('시간 : ', tt)
+            # print('시간 : ', tt)
             try:
                 sns_site = soup.find('div', {'class': 'CQDdi'}).text
             except:

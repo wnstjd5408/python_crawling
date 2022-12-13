@@ -3,8 +3,8 @@ import pandas as pd
 import pymysql
 from datetime import datetime
 
-may_date = "2022-06-04"
-may_todate_date = datetime.strptime(may_date, "%Y-%m-%d")
+oc_date = "2022-10-31"  # 이 날 이후 데이터만 DB에 넣기
+oc_todate_date = datetime.strptime(oc_date, "%Y-%m-%d")
 
 
 def db_input():
@@ -15,7 +15,7 @@ def db_input():
 
     sql = 'insert into locations_apartment values (null ,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
 
-    f = open('./부동산/화명동전처리데이터(2022-06-27(15,57,49)).csv',
+    f = open('./부동산/온천동전처리데이터(2022-11-29(13,52,30)).csv',
              'r', encoding='utf-8-sig')
 
     rdr = csv.reader(f)
@@ -23,11 +23,11 @@ def db_input():
 
     for line in rdr:
         line[12] = datetime.strptime(line[12], "%Y-%m-%d")
-        if line[12] > may_todate_date:
+        if line[12] > oc_todate_date:
             count += 1
             curs.execute(sql, (line[0], line[1], line[2], line[3],
                                line[4], line[5], line[6], line[7], line[8],
-                               line[9], line[10], line[11], line[12], line[13], line[14], line[15], '2'))
+                               line[9], line[10], line[11], line[12], line[13], line[14], line[15], '3'))
         else:
             continue
 
@@ -38,5 +38,7 @@ def db_input():
     print('OK')
     print('총 들어간수: ', count)
 
+if __name__ == '__main__':
+    db_input()
+    
 
-db_input()

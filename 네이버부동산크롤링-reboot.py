@@ -19,6 +19,7 @@ def click_nolink_for_scrollDown(driver):
     try:
         plus = driver.find_element_by_css_selector(
             '#_article_list_tab_cd')
+
     except:
         driver.close()
         time.sleep(1)
@@ -172,6 +173,7 @@ def driver_open(place):
     driver = webdriver.Chrome(
         executable_path="D:/파이썬 공부/web/crawling/chromedriver.exe"
     )
+
     driver.implicitly_wait(20)
     driver.get(URL)
     time.sleep(0.5)
@@ -179,6 +181,10 @@ def driver_open(place):
         plus = driver.find_element_by_xpath(
             '//*[@id="_countContainer"]')
         plus.click()
+        time.sleep(1)
+        plus1 = driver.find_element_by_xpath(
+            '//*[@id="_listContainer"]/div/div[2]/div/a[3]')
+        plus1.click()
         time.sleep(1)
 
     except:
