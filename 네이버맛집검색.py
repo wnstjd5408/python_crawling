@@ -30,9 +30,10 @@ def click_nolink_for_scrollDown(driver):
             time.sleep(1)
             # 시간 클릭
             element = driver.find_element_by_css_selector(
-                '#app-root > div > div > div > div:nth-child(6) > div > div.place_section.no_margin.vKA6F > div > ul > li.SF_Mq.Sg7qM > div > a')
+                '#app-root > div > div > div > div:nth-child(6) > div > div.place_section.no_margin.vKA6F > div > div > div.O8qbU.pSavy > div > a')
             # app-root > div > div > div > div:nth-child(5) > div > div.place_section.no_margin._18vYz > div > ul > li._1M_Iz._2KHqk > div > a
 
+            # app-root > div > div > div > div:nth-child(6) > div > div.place_section.no_margin.vKA6F > div > ul > li.SF_Mq.Sg7qM > div > a
             print('클릭: ', element)
 
             element.click()
@@ -110,8 +111,7 @@ def driver_open(place):
     driver.implicitly_wait(20)
     driver.get(URL)
 
-    all_scrolling(driver)
-
+    # all_scrolling(driver)
     html = driver.page_source
     place = check(place)
     one_scrolling(driver, html, place)
@@ -210,10 +210,10 @@ def one_scrolling(driver, ht, plus):
                 visit = score_visit_blog[1].find('em').text
                 blog = score_visit_blog[2].find('em').text
             # print(f'점수 : {score} , 방문자리뷰 : {visit}, 블로그 리뷰 : {blog}')
-            data = soup.find_all('div', {'class': 'x8JmK'})
-            location = data[0].find('span', {'class': 'IH7VW'}).text
+            data = soup.find_all('div', {'class': 'O8qbU'})
+            location = data[0].find('span', {'class': 'LDgIH'}).text
             try:
-                subway_location = data[0].find('div', {'class': 'jyfLw'})
+                subway_location = data[0].find('div', {'class': 'nZapA'})
                 # subway_number = subway_location.find(
                 #     'span', {'class': '_12Coj'}).text
                 subway_location = subway_location.text
@@ -222,8 +222,8 @@ def one_scrolling(driver, ht, plus):
             # 영엽시간 검색
             # print(f'위치 : {location}, 지하철역 : {subway_location}')
             try:
-                timelen = soup.find_all('div', {'class': 'x8JmK'})[1].find_all(
-                    'div', {'class': 'nNPOq'})
+                timelen = soup.find_all('div', {'class': 'O8qbU'})[1].find_all(
+                    'div', {'class': 'w9QyJ'})
                 print('갯수  :',  len(timelen))
                 if len(timelen) == 1:
                     print(timelen[0].text)
@@ -232,9 +232,9 @@ def one_scrolling(driver, ht, plus):
                     for i in timelen[1::]:
                         try:
 
-                            etc = i.find('span', {'class': 'ob_be'}).text
+                            etc = i.find('span', {'class': 'A_cdD'}).text
                         except:
-                            etc = i.find('span', {'class': 'ob_be'}).text
+                            etc = i.find('span', {'class': 'A_cdD'}).text
 
                         opentime.append(etc)
 
