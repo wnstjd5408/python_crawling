@@ -44,11 +44,6 @@ def click_nolink_for_scrollDown(driver):
             """ 
             클릭 후에 스크롤링 주석처리 
             """
-            # time.sleep(0.5)
-            # for i in range(10):
-            #     time.sleep(0.2)
-            #     driver.find_element_by_css_selector(
-            #         "body").send_keys(Keys.PAGE_DOWN)
             time.sleep(0.1)
 
         except NoSuchElementException as e:
@@ -79,12 +74,6 @@ def check(file_name):
     file_ext = '.csv'
     output_path = 'D:/파이썬 공부/web/crawling/place/%s(%s)%s' % (
         file_name, nowDatetime, file_ext)
-    # uniq = 1
-    # while os.path.exists(output_path):
-
-    #     output_path = 'D:/파이썬 공부/web/crawling/place/%s(%d)%s' % (
-    #         file_name, uniq, file_ext)
-    #     uniq += 1
     return output_path
 
 
@@ -118,6 +107,8 @@ def driver_open(place):
 
     driver.quit()
 
+# 자세한 페이지 데이터 수집
+
 
 def one_scrolling(driver, ht, plus):
     subway_location = ""
@@ -126,7 +117,6 @@ def one_scrolling(driver, ht, plus):
     num = 0
     stop = 0
     count = 0
-    so = bs(ht, 'html.parser')
 
     while True:
         opentime.clear()
@@ -153,7 +143,6 @@ def one_scrolling(driver, ht, plus):
             continue
 
         # 열어준 탭이동을 합니다
-
         driver.switch_to_window(driver.window_handles[-1])
 
         time.sleep(0.5)
@@ -177,33 +166,32 @@ def one_scrolling(driver, ht, plus):
             imagefirst = im[found+2::]
             backfound = imagefirst.find(')')
             imageurl = imagefirst[0: backfound-1]
-            # print('이미지 URL :', imageurl)
             # 이미지 검색
             name = soup.find('span', {'class': 'Fc1rA'}).text
-            # print("이름 : ", name)
             info = soup.find('span', {'class':  'DJJvD'}).text
-            # print("가게 종류 : ", info)
             # 점수, 방문자, 블로그 리뷰
             avg = soup.find('div', {'class': 'dAsGb'})
             score_visit_blog = avg.find_all('span',  {'class': 'PXMot'})
-
             if len(score_visit_blog) == 1:
+                review1 = score_visit_blog[0].find('em').text
                 if '방문자리뷰' in score_visit_blog[0].find('a').text:
-                    visit = score_visit_blog[0].find('em').text
+                    visit = review1
                 elif '블로그리뷰' in score_visit_blog[0].find('a').text:
-                    blog = score_visit_blog[0].find('em').text
+                    blog = review1
             elif len(score_visit_blog) == 2:
+                review1 = score_visit_blog[0].find('em').text
+                review2 = score_visit_blog[1].find('em').text
                 try:
                     if score_visit_blog[0].find('span', {'class': 'place_blind'}).text == '별점':
                         if "블로그리뷰" in score_visit_blog[1].find('a').text:
-                            score = score_visit_blog[0].find('em').text
-                            blog = score_visit_blog[1].find('em').text
+                            score = review1
+                            blog = review2
                         else:
-                            score = score_visit_blog[0].find('em').text
-                            visit = score_visit_blog[1].find('em').text
+                            score = review1
+                            visit = review2
                 except:
-                    visit = score_visit_blog[0].find('em').text
-                    blog = score_visit_blog[1].find('em').text
+                    visit = review1
+                    blog = review2
 
             elif len(score_visit_blog) == 3:
                 score = score_visit_blog[0].find('em').text
@@ -213,16 +201,12 @@ def one_scrolling(driver, ht, plus):
             data = soup.find_all('div', {'class': 'O8qbU'})
             location = data[0].find('span', {'class': 'LDgIH'}).text
             try:
-                subway_location = data[0].find('div', {'class': 'nZapA'})
-                # subway_number = subway_location.find(
-                #     'span', {'class': '_12Coj'}).text
-                subway_location = subway_location.text
+                subway_location = data[0].find('div', {'class': 'nZapA'}).text
             except:
                 subway_location = None
             # 영엽시간 검색
-            # print(f'위치 : {location}, 지하철역 : {subway_location}')
             try:
-                timelen = soup.find_all('div', {'class': 'O8qbU'})[1].find_all(
+                timelen = data[1].find_all(
                     'div', {'class': 'w9QyJ'})
                 print('갯수  :',  len(timelen))
                 if len(timelen) == 1:
@@ -230,11 +214,11 @@ def one_scrolling(driver, ht, plus):
                     tt = timelen[0].text
                 else:
                     for i in timelen[1::]:
+                        text_time = i.find('span', {'class': 'A_cdD'}).text
                         try:
-
-                            etc = i.find('span', {'class': 'A_cdD'}).text
+                            etc = text_time
                         except:
-                            etc = i.find('span', {'class': 'A_cdD'}).text
+                            etc = text_time
 
                         opentime.append(etc)
 
@@ -243,19 +227,17 @@ def one_scrolling(driver, ht, plus):
             except:
                 tt = None
                 # place를 리스트에 딕셔너리 형태로 저장을 시킨다
-
-            # print('시간 : ', tt)
             try:
-                sns_site = soup.find('div', {'class': 'CQDdi'}).text
+                sns_site = soup.find('div', {'class': 'jO09N'}).text
             except:
                 sns_site = None
             print('sns_site : ', sns_site)
-            now = datetime.datetime.now()
             nowDate = now.strftime('%Y-%m-%d')
             place.append({"name": name, "info": info, "score": score, "visit": visit, "blog": blog,
                           "location": location, "subway_location": subway_location, "clock":  tt, "sns_site": sns_site, "imageurl": imageurl, "nowDate": nowDate})
             print(f'{count} : {name}')
             save_to_place(plus, place)
+
             # driver를 종료하고 전에있던 탭을 켜줍니다.
             driver.close()
             driver.switch_to_window(driver.window_handles[0])
@@ -283,9 +265,6 @@ class MyApp(QWidget):
         self.setGeometry(800, 350, 400, 300)
 
         self.show()
-
-    # def (self):
-    #     driver_open(qle.text())
 
     def check_pressed(self):
         driver_open(self.qle.text())
