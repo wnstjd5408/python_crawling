@@ -50,8 +50,8 @@ def check(file_name):
 def save_to_land(name, land):
     f = open(name, 'w+', newline='',  encoding='utf-8-sig')
     writer = csv.writer(f)
-    writer.writerow(['번호', '매물명', '동', '거래유형', '가격', '유형', '전체면적', '실제면적',
-                     '높이', '방향', '설명', '제공', '확인날짜', '확인', '건물특징', '링크'])
+    writer.writerow(['매물명', '동', '거래유형', '가격', '유형', '전체면적', '실제면적',
+                     '높이', '방향', '설명', '특징', '확인', '확인날짜', '링크', '크롤링날짜'])
     for i in land:
         writer.writerow(list(i.values()))
     return
