@@ -83,7 +83,7 @@ def all_scrolling(driver):
         try:
             body = driver.find_element_by_css_selector("body")
             time.sleep(0.3)
-            for i in range(500):  # 첫페이지의 길이만큼이나 안에 있는 숫자를 늘려주고 줄여줄 수 있다.
+            for i in range(150):  # 첫페이지의 길이만큼이나 안에 있는 숫자를 늘려주고 줄여줄 수 있다.
                 time.sleep(0.2)
                 body.send_keys(Keys.PAGE_DOWN)
             break
@@ -127,7 +127,9 @@ def one_scrolling(driver, ht, plus):
         try:
             # find_element_by_xpath로 위치를 찾아서 클릭을 해준다
             driver.find_element_by_xpath(
-                f'//*[@id="_list_scroll_container"]/div/div/div[2]/ul/li[{num}]/div[1]/div[1]/a').send_keys(Keys.CONTROL + "\n")
+                f'//*[@id="_list_scroll_container"]/div/div/div[2]/ul/li[{num}]/div[1]/a').send_keys(Keys.CONTROL + "\n")
+
+                
             # driver.find_element_by_css_selector(
             #     f"#_list_scroll_container > div > div > div:nth-child(2) > ul > li:nth-child({num}) > div.Ow5Yt > a:nth-child(1)").send_keys(Keys.CONTROL + "\n")
             stop = 0
