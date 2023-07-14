@@ -2,13 +2,15 @@ import csv
 import datetime
 import sys
 import time
+import numpy as np
+import pandas as pd
 
 from bs4 import BeautifulSoup as bs
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
 
 # 페이지 들어간 후에 클릭하는거
 now = datetime.datetime.now()
@@ -59,21 +61,26 @@ def click_nolink_for_scrollDown(driver):
 
 
 def save_to_place(name, place):
-    f = open(name, 'w+', newline='',  encoding='utf-8-sig')
+    f = open(name, 'a', newline='',  encoding='utf-8-sig')
     writer = csv.writer(f)
-    writer.writerow(['가게명', '가게정보', '평점', '방문자리뷰',
-                     '블로그리뷰', '위치', '근처 지하철역', '시간', 'SNS 사이트', '이미지 URL', '등록날짜'])
-    for i in place:
-        writer.writerow(list(i.values()))
+
+    writer.writerow(place.values())
     return
 
 # 이름명이 동일한 csv 파일명을 바꾸어주는 메서드
 
 
-def check(file_name):
+def file_path(file_name):
     file_ext = '.csv'
     output_path = 'D:/파이썬 공부/web/crawling/place/%s(%s)%s' % (
         file_name, nowDatetime, file_ext)
+    
+    f = open(output_path, 'w', newline='',  encoding='utf-8-sig')
+    writer = csv.writer(f)
+    header_list = ['가게명', '가게정보', '평점', '방문자리뷰',
+                     '블로그리뷰', '위치', '근처 지하철역', '시간', 'SNS 사이트', '이미지 URL', '등록날짜']
+    writer.writerow(header_list)
+    
     return output_path
 
 
@@ -83,7 +90,7 @@ def all_scrolling(driver):
         try:
             body = driver.find_element_by_css_selector("body")
             time.sleep(0.3)
-            for i in range(150):  # 첫페이지의 길이만큼이나 안에 있는 숫자를 늘려주고 줄여줄 수 있다.
+            for _ in range(300):  # 첫페이지의 길이만큼이나 안에 있는 숫자를 늘려주고 줄여줄 수 있다.
                 time.sleep(0.2)
                 body.send_keys(Keys.PAGE_DOWN)
             break
@@ -102,18 +109,16 @@ def driver_open(place):
 
     # all_scrolling(driver)
     html = driver.page_source
-    place = check(place)
-    one_scrolling(driver, html, place)
+    outpath = file_path(place)
+    one_scrolling(driver, html, outpath)
 
     driver.quit()
 
 # 자세한 페이지 데이터 수집
 
-
 def one_scrolling(driver, ht, plus):
     subway_location = ""
     opentime = []
-    place = []
     num = 0
     stop = 0
     count = 0
@@ -235,8 +240,8 @@ def one_scrolling(driver, ht, plus):
                 sns_site = None
             print('sns_site : ', sns_site)
             nowDate = now.strftime('%Y-%m-%d')
-            place.append({"name": name, "info": info, "score": score, "visit": visit, "blog": blog,
-                          "location": location, "subway_location": subway_location, "clock":  tt, "sns_site": sns_site, "imageurl": imageurl, "nowDate": nowDate})
+            place={"name": name, "info": info, "score": score, "visit": visit, "blog": blog,
+                          "location": location, "subway_location": subway_location, "clock":  tt, "sns_site": sns_site, "imageurl": imageurl, "nowDate": nowDate}
             print(f'{count} : {name}')
             save_to_place(plus, place)
 
