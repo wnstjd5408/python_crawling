@@ -58,8 +58,8 @@ def save_to_place(name, place):
 
 
 URL = "https://movie.naver.com/movie/running/current.naver"
-driver = webdriver.Chrome(
-    executable_path="D:/파이썬 공부/web/crawling/chromedriver.exe")
+driver = webdriver.Chrome(service= Service(ChromeDriverManager().install()))
+
 driver.implicitly_wait(20)
 driver.get(URL)
 

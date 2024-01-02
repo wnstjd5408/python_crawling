@@ -3,7 +3,8 @@ import pymysql
 import csv
 import datetime
 import re
-
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
 
 def cleanText(data):
     extracts = re.compile('[^ 가-힣|a-z|A-Z|0-9|\[|\]|(|)|-|~|?|!|.|,|:|;|%]+')
